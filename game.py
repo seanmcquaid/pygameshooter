@@ -1,5 +1,5 @@
 # miniconda access to run pygame
-# cd ~/miniconda/bin
+# cd ~/miniconda3/bin
 # source activate py3k
 # cd ~/development/11:18\ -\ Immersive/unit1/pygame_shooter
 # python game.py
@@ -8,6 +8,9 @@
 import pygame
 from Hero import Hero
 from BadGuy import BadGuy
+from Arrow import Arrow
+# Get group and groupcollide from the sprite module
+from pygame.sprite import Group, groupcollide
 
 # 2. initialize pygame
 pygame.init()
@@ -19,8 +22,18 @@ pygame_screen = pygame.display.set_mode(screen_size)
 # 4. set the title of the window that opens
 pygame.display.set_caption('Shooter')
 
+#objects for each our hero and badguy
 theHero = Hero()
+
 badGuy = BadGuy()
+badGuys = Group()
+badGuys.add(badGuy)
+
+# a list to hold our arrows
+# arrows = []
+# A Group is a special pygame list for Sprites
+# can only add sprites to groups
+arrows = Group()
 
 # ==========VARIABLES FOR OUR GAME ===============
 background_image = pygame.image.load('background.png')
@@ -62,8 +75,13 @@ while game_on:
                 #the user pressed the left arrow!!! Move our dude left
                 # theHero.x -= 10
                 theHero.shouldMove("left")
+            elif (event.key == 32):
+                #Space bar..... FIRE!!!!
+                new_arrow = Arrow(theHero)
+                arrows.add(new_arrow)
             else:
                 print (event.key)
+                
         elif (event.type == pygame.KEYUP):
             # the user RELEASED a key
             if (event.key == 273):
@@ -87,8 +105,21 @@ while game_on:
     # bottom = 512, 0 
     # bottom right = 512 , 480
     pygame_screen.blit(background_image,[0, 0])
-    pygame_screen.blit(hero_image,[theHero.x, theHero.y])
-    pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+    
     theHero.drawMe()
-    badGuy.update_me(theHero)
+    pygame_screen.blit(hero_image,[theHero.x, theHero.y])
+    
+    # draw the bad guys
+    for badGuy in badGuys:
+        badGuy.update_me(theHero)
+        pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+
+    #draw the arrows
+    for arrow in arrows:
+        arrow.updateMe()
+        pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
+
+    # if arrow hits badGuys, this will remove both (hence both true)
+    arrowHit = groupcollide(arrows, badGuys, True, True)
+    
     pygame.display.flip()
