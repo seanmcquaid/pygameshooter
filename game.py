@@ -19,12 +19,12 @@ pygame.init()
 # made screen size equal to background image size
 screen_size = (512, 480)
 pygame_screen = pygame.display.set_mode(screen_size)
+
 # 4. set the title of the window that opens
 pygame.display.set_caption('Shooter')
 
 #objects for each our hero and badguy
 theHero = Hero()
-
 badGuy = BadGuy()
 badGuys = Group()
 badGuys.add(badGuy)
@@ -41,10 +41,10 @@ hero_image = pygame.image.load('hero.png')
 goblin_image = pygame.image.load('goblin.png')
 monster_image = pygame.image.load('monster.png')
 arrow_image = pygame.image.load('Arrow.png')
-heroLoc = {
-    'x': 0,
-    'y': 0 
-}
+
+#background music created via pygame
+bg_music = pygame.mixer.Sound('bg.wav')
+bg_music.play()
 
 # ==========MAIN GAME LOOP =============
 game_on = True
@@ -59,19 +59,19 @@ while game_on:
             game_on = False
         elif (event.type == pygame.KEYDOWN):
             # THE USER PRESSED A KEY
-            if (event.key == 273 and theHero.y > 0):
+            if (event.key == 273):
                 #the user pressed the up arrow!!! Move our dude up
                 # theHero.y -= 10
                 theHero.shouldMove("up")
-            elif (event.key == 274 and theHero.y < 448):
+            elif (event.key == 274):
                 #the user pressed the down arrow!!! Move our dude down
                 # theHero.y += 10
                 theHero.shouldMove("down")
-            elif (event.key == 275 and theHero.x < 480):
+            elif (event.key == 275):
                 #the user pressed the right arrow!!! Move our dude right
                 # theHero.x = 10
                 theHero.shouldMove("right")
-            elif (event.key == 276 and theHero.x > 0):
+            elif (event.key == 276):
                 #the user pressed the left arrow!!! Move our dude left
                 # theHero.x -= 10
                 theHero.shouldMove("left")
@@ -119,6 +119,9 @@ while game_on:
         arrow.updateMe()
         pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
 
+
+    # make collision between badGuy and goodguy
+    # create multiple bad guys
     # if arrow hits badGuys, this will remove both (hence both true)
     arrowHit = groupcollide(arrows, badGuys, True, True)
     
