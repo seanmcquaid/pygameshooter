@@ -6,6 +6,8 @@
 
 # 1. include pygame 
 import pygame
+from Hero import Hero
+from BadGuy import BadGuy
 
 # 2. initialize pygame
 pygame.init()
@@ -15,7 +17,10 @@ pygame.init()
 screen_size = (512, 480)
 pygame_screen = pygame.display.set_mode(screen_size)
 # 4. set the title of the window that opens
-pygame.display.set_caption('Robin Hood')
+pygame.display.set_caption('Shooter')
+
+theHero = Hero()
+badGuy = BadGuy()
 
 # ==========VARIABLES FOR OUR GAME ===============
 background_image = pygame.image.load('background.png')
@@ -41,18 +46,34 @@ while game_on:
             game_on = False
         elif (event.type == pygame.KEYDOWN):
             # THE USER PRESSED A KEY
-            if (event.key == 273 and heroLoc['y'] > 0):
+            if (event.key == 273 and theHero.y > 0):
                 #the user pressed the up arrow!!! Move our dude up
-                heroLoc['y'] -= 15
-            elif (event.key == 274 and heroLoc['y'] < 448):
+                # theHero.y -= 10
+                theHero.shouldMove("up")
+            elif (event.key == 274 and theHero.y < 448):
                 #the user pressed the down arrow!!! Move our dude down
-                heroLoc['y'] += 15
-            elif (event.key == 275 and heroLoc['x'] < 480):
+                # theHero.y += 10
+                theHero.shouldMove("down")
+            elif (event.key == 275 and theHero.x < 480):
                 #the user pressed the right arrow!!! Move our dude right
-                heroLoc['x'] += 15
-            elif (event.key == 276 and heroLoc['x'] > 0):
+                # theHero.x = 10
+                theHero.shouldMove("right")
+            elif (event.key == 276 and theHero.x > 0):
                 #the user pressed the left arrow!!! Move our dude left
-                heroLoc['x'] -= 15
+                # theHero.x -= 10
+                theHero.shouldMove("left")
+            else:
+                print (event.key)
+        elif (event.type == pygame.KEYUP):
+            # the user RELEASED a key
+            if (event.key == 273):
+                theHero.shouldMove("up", False)
+            elif (event.key == 274 ): 
+                theHero.shouldMove("down", False)
+            elif (event.key == 275):
+                theHero.shouldMove("right", False)
+            elif (event.key == 276):
+                theHero.shouldMove("left", False) 
             else:
                 print (event.key)
 
@@ -66,5 +87,8 @@ while game_on:
     # bottom = 512, 0 
     # bottom right = 512 , 480
     pygame_screen.blit(background_image,[0, 0])
-    pygame_screen.blit(hero_image,[heroLoc['x'], heroLoc['y']])
+    pygame_screen.blit(hero_image,[theHero.x, theHero.y])
+    pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+    theHero.drawMe()
+    badGuy.update_me(theHero)
     pygame.display.flip()
