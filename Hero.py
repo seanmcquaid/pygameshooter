@@ -23,10 +23,10 @@ class Hero(object):
             self.shouldMoveLeft = start
     def drawMe(self):
         if (self.shouldMoveUp):
-            if self.y < 32:
+            if self.y > 32:
                 self.y -= self.speed
         if (self.shouldMoveDown):
-            if self.y > 448:
+            if self.y < 448:
                 self.y += self.speed
         if (self.shouldMoveRight):
             if self.x < 480:
