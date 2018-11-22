@@ -12,7 +12,7 @@ class BadGuy(Sprite):
         self.speed = 4
         self.rect = pygame.Rect(0, 0, 64, 64)
         self.rect.centerx = self.x
-        self.rect.top = self.y
+        self.rect.centery = self.y
     def update_me(self, theHero):
         # find hypotonuse of triangle between hero and bad guy
         dx = self.x - theHero.x

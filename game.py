@@ -25,14 +25,11 @@ pygame.display.set_caption('Shooter')
 
 #objects for each our hero and badguy
 theHero = Hero()
+
+
 badGuy = BadGuy()
 badGuys = Group()
 badGuys.add(badGuy)
-
-# a list to hold our arrows
-# arrows = []
-# A Group is a special pygame list for Sprites
-# can only add sprites to groups
 arrows = Group()
 
 # ==========VARIABLES FOR OUR GAME ===============
@@ -45,6 +42,8 @@ arrow_image = pygame.image.load('Arrow.png')
 #background music created via pygame
 bg_music = pygame.mixer.Sound('bg.wav')
 bg_music.play()
+
+# ======= INTRO SCREEN LOOP =======
 
 # ==========MAIN GAME LOOP =============
 game_on = True
@@ -105,10 +104,10 @@ while game_on:
     # bottom = 512, 0 
     # bottom right = 512 , 480
     pygame_screen.blit(background_image,[0, 0])
-    
-    theHero.drawMe()
+
     pygame_screen.blit(hero_image,[theHero.x, theHero.y])
-    
+    theHero.drawMe()
+
     # draw the bad guys
     for badGuy in badGuys:
         badGuy.update_me(theHero)
@@ -119,10 +118,12 @@ while game_on:
         arrow.updateMe()
         pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
 
-
-    # make collision between badGuy and goodguy
+        
     # create multiple bad guys
+
     # if arrow hits badGuys, this will remove both (hence both true)
     arrowHit = groupcollide(arrows, badGuys, True, True)
     
+    # make collision between badGuy and goodguy
+
     pygame.display.flip()
