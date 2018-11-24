@@ -6,6 +6,8 @@
 
 # 1. include pygame 
 import pygame
+import time
+import random
 from Hero import Hero
 from BadGuy import BadGuy
 from Arrow import Arrow
@@ -36,6 +38,10 @@ badGuys.add(badGuy)
 arrows = Group()
 
 # ==========VARIABLES FOR OUR GAME ===============
+#intro screen
+white = (255,255,255)
+clock = pygame.time.Clock()
+
 background_image = pygame.image.load('background.png')
 hero_image = pygame.image.load('hero.png')
 goblin_image = pygame.image.load('goblin.png')
@@ -47,6 +53,23 @@ bg_music = pygame.mixer.Sound('bg.wav')
 bg_music.play()
 
 # ======= INTRO SCREEN LOOP =======
+
+def game_intro():
+
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            print(event)
+            if event.type == pygame.KEYDOWN:
+                if (event.key == 32):
+                    intro = False
+                
+        pygame_screen.fill(white)
+        pygame.display.update()
+        clock.tick(15)
+
+game_intro()
 
 # ==========MAIN GAME LOOP =============
 game_on = True
@@ -123,6 +146,8 @@ while game_on:
 
     # if arrow hits badGuys, this will remove both (hence both true)
     arrowHit = groupcollide(arrows, badGuys, True, True)
+
+    # make point counter that increments each time your arrow hits the goblin
 
 
     # make collision between badGuy and goodguy
