@@ -60,18 +60,16 @@ def game_intro():
 
     while intro:
         for event in pygame.event.get():
-            print(event)
             if event.type == pygame.KEYDOWN:
                 if (event.key == 32):
                     intro = False
                 
         pygame_screen.fill(white)
         pygame.display.update()
-        clock.tick(15)
 
 game_intro()
 
-# ==========MAIN GAME LOOP =============
+# ==========MAIN GAME =============
 game_on = True
 # the loop will run as long qas our bool is true
 while game_on:
@@ -153,7 +151,12 @@ while game_on:
     # make collision between badGuy and goodguy
     heroHit = groupcollide(hero, badGuys, True, True)
 
+    
+    # If hero is hit via collision, game closes out, need to change this 
+    # to create a message
     if heroHit: 
         game_on = False
+    # if game is over, give them their point total of bad guys slain, 
+    # give them the option to end the game/quit or start over
 
     pygame.display.flip()
