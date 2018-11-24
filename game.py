@@ -25,6 +25,7 @@ pygame.display.set_caption('Shooter')
 
 #objects for each our hero and badguy
 theHero = Hero()
+hero = Group()
 
 
 badGuy = BadGuy()
@@ -125,5 +126,6 @@ while game_on:
     arrowHit = groupcollide(arrows, badGuys, True, True)
     
     # make collision between badGuy and goodguy
-
+    heroHit = groupcollide(hero, badGuys, True, True)
+    
     pygame.display.flip()
