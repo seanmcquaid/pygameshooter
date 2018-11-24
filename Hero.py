@@ -30,12 +30,16 @@ class Hero(Sprite):
         if (self.shouldMoveUp):
             if self.y > 32:
                 self.y -= self.speed
+                self.rect.y = self.y
         if (self.shouldMoveDown):
             if self.y < 448:
                 self.y += self.speed
+                self.rect.y = self.y
         if (self.shouldMoveRight):
             if self.x < 480:
                 self.x += self.speed
+                self.rect.x = self.x
         if (self.shouldMoveLeft):
             if self.x > 32:
                 self.x -= self.speed
+                self.rect.x = self.x

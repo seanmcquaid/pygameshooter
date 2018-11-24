@@ -26,11 +26,13 @@ pygame.display.set_caption('Shooter')
 #objects for each our hero and badguy
 theHero = Hero()
 hero = Group()
+hero.add(theHero)
 
 
 badGuy = BadGuy()
 badGuys = Group()
 badGuys.add(badGuy)
+
 arrows = Group()
 
 # ==========VARIABLES FOR OUR GAME ===============
@@ -79,8 +81,7 @@ while game_on:
                 #Space bar..... FIRE!!!!
                 new_arrow = Arrow(theHero)
                 arrows.add(new_arrow)
-            else:
-                print (event.key)
+
                 
         elif (event.type == pygame.KEYUP):
             # the user RELEASED a key
@@ -92,8 +93,6 @@ while game_on:
                 theHero.shouldMove("right", False)
             elif (event.key == 276):
                 theHero.shouldMove("left", False) 
-            else:
-                print (event.key)
 
     # ======= DRAW STUFF =======
     # we use blit to draw on the screen. blit = block image transfer
@@ -124,8 +123,12 @@ while game_on:
 
     # if arrow hits badGuys, this will remove both (hence both true)
     arrowHit = groupcollide(arrows, badGuys, True, True)
-    
+
+
     # make collision between badGuy and goodguy
     heroHit = groupcollide(hero, badGuys, True, True)
-    
+
+    if heroHit: 
+        game_on = False
+
     pygame.display.flip()
