@@ -16,6 +16,7 @@ from pygame.sprite import Group, groupcollide
 
 # 2. initialize pygame
 pygame.init()
+pygame.font.init()
 
 # 3. make a screen with a size. The size MUST be a tuple
 # made screen size equal to background image size
@@ -40,6 +41,8 @@ arrows = Group()
 # ==========VARIABLES FOR OUR GAME ===============
 #intro screen
 white = (255,255,255)
+black = (0,0,0)
+font = pygame.font.SysFont("comicsansms", 72)
 clock = pygame.time.Clock()
 
 background_image = pygame.image.load('background.png')
@@ -130,23 +133,30 @@ while game_on:
     theHero.drawMe()
 
     # draw the bad guys
-    for badGuy in badGuys:
-        badGuy.update_me(theHero)
-        pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+    def draw_bad_guy():
+        for badGuy in badGuys:
+            badGuy.update_me(theHero)
+            pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+    
+    draw_bad_guy()
 
     #draw the arrows
-    for arrow in arrows:
-        arrow.updateMe()
-        pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
+    def draw_arrow():
+        for arrow in arrows:
+            arrow.updateMe()
+            pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
 
-        
+    draw_arrow()
     # create multiple bad guys
+    # create a loop that utilizes above function every x amount of seconds? 
 
     # if arrow hits badGuys, this will remove both (hence both true)
     arrowHit = groupcollide(arrows, badGuys, True, True)
 
     # make point counter that increments each time your arrow hits the goblin
-
+    point_counter = 0
+    if arrowHit:
+        point_counter += 1
 
     # make collision between badGuy and goodguy
     heroHit = groupcollide(hero, badGuys, True, True)
@@ -154,7 +164,7 @@ while game_on:
     
     # If hero is hit via collision, game closes out, need to change this 
     # to create a message
-    if heroHit: 
+    if heroHit:
         game_on = False
     # if game is over, give them their point total of bad guys slain, 
     # give them the option to end the game/quit or start over
