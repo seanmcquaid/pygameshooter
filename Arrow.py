@@ -13,9 +13,10 @@ class Arrow(Sprite):
         self.speed = 20
         # rect is used in both arrow and badguy to enable collision
         # rectangles colliding
-        self.rect = pygame.Rect(0, 0, 64, 64)
+        self.rect = pygame.Rect(0, 0, 32, 32)
         self.rect.centerx = self.x
         self.rect.centery = self.y
     def updateMe(self):
         self.x += self.speed
         self.rect.x = self.x
+        

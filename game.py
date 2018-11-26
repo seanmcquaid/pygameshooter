@@ -79,105 +79,108 @@ def game_intro():
 game_intro()
 
 # ==========MAIN GAME =============
-game_on = True
-# the loop will run as long qas our bool is true
-while game_on:
-    # we are in the game loop from here on out
-    # 5. Listen for events and quit if the user clicks the x
-    # ======= EVENT LISTENER =======
-    for event in pygame.event.get():
-        if (event.type == pygame.QUIT):
-            # THE USER CLICKED THE RED DOT!
+def main_game():
+    game_on = True
+    # the loop will run as long qas our bool is true
+    while game_on:
+        # we are in the game loop from here on out
+        # 5. Listen for events and quit if the user clicks the x
+        # ======= EVENT LISTENER =======
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT):
+                # THE USER CLICKED THE RED DOT!
+                game_on = False
+            elif (event.type == pygame.KEYDOWN):
+                # THE USER PRESSED A KEY
+                if (event.key == 273):
+                    #the user pressed the up arrow!!! Move our dude up
+                    # theHero.y -= 10
+                    theHero.shouldMove("up")
+                elif (event.key == 274):
+                    #the user pressed the down arrow!!! Move our dude down
+                    # theHero.y += 10
+                    theHero.shouldMove("down")
+                elif (event.key == 275):
+                    #the user pressed the right arrow!!! Move our dude right
+                    # theHero.x = 10
+                    theHero.shouldMove("right")
+                elif (event.key == 276):
+                    #the user pressed the left arrow!!! Move our dude left
+                    # theHero.x -= 10
+                    theHero.shouldMove("left")
+                elif (event.key == 32):
+                    #Space bar..... FIRE!!!!
+                    new_arrow = Arrow(theHero)
+                    arrows.add(new_arrow)
+
+                    
+            elif (event.type == pygame.KEYUP):
+                # the user RELEASED a key
+                if (event.key == 273):
+                    theHero.shouldMove("up", False)
+                elif (event.key == 274 ): 
+                    theHero.shouldMove("down", False)
+                elif (event.key == 275):
+                    theHero.shouldMove("right", False)
+                elif (event.key == 276):
+                    theHero.shouldMove("left", False) 
+
+        # ======= DRAW STUFF =======
+        # we use blit to draw on the screen. blit = block image transfer
+        # blit is a method that takes 2 args:
+        # 1. What to draw
+        # 2. Where to draw it - Starts at 0,0 
+        # top left = 0,0
+        # top right = 0,480
+        # bottom = 512, 0 
+        # bottom right = 512 , 480
+        # background must be drawn first > hero > goblin , etc
+        pygame_screen.blit(background_image,[0, 0])
+
+        pygame_screen.blit(hero_image,[theHero.x, theHero.y])
+        theHero.drawMe(512, 480)
+
+        # draw the bad guys
+        def draw_bad_guy():
+            for badGuy in badGuys:
+                badGuy.update_me(theHero)
+                pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+        
+        draw_bad_guy()
+
+        #draw the arrows
+        def draw_arrow():
+            for arrow in arrows:
+                arrow.updateMe()
+                pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
+
+        draw_arrow()
+        # create multiple bad guys
+        # create a loop that utilizes above function every x amount of seconds? 
+
+        # if arrow hits badGuys, this will remove both (hence both true)
+        arrowHit = groupcollide(arrows, badGuys, True, True)
+
+        # make point counter that increments each time your arrow hits the goblin
+        point_counter = 0
+        if arrowHit:
+            point_counter += 1
+
+        # display point counter on top right of screen
+
+        # make collision between badGuy and goodguy
+        heroHit = groupcollide(hero, badGuys, True, True)
+
+        
+        # If hero is hit via collision, game closes out, need to change this 
+        # to create a message
+        if heroHit:
             game_on = False
-        elif (event.type == pygame.KEYDOWN):
-            # THE USER PRESSED A KEY
-            if (event.key == 273):
-                #the user pressed the up arrow!!! Move our dude up
-                # theHero.y -= 10
-                theHero.shouldMove("up")
-            elif (event.key == 274):
-                #the user pressed the down arrow!!! Move our dude down
-                # theHero.y += 10
-                theHero.shouldMove("down")
-            elif (event.key == 275):
-                #the user pressed the right arrow!!! Move our dude right
-                # theHero.x = 10
-                theHero.shouldMove("right")
-            elif (event.key == 276):
-                #the user pressed the left arrow!!! Move our dude left
-                # theHero.x -= 10
-                theHero.shouldMove("left")
-            elif (event.key == 32):
-                #Space bar..... FIRE!!!!
-                new_arrow = Arrow(theHero)
-                arrows.add(new_arrow)
+        # if game is over, give them their point total of bad guys slain, 
+        if game_on == False:
+            print (point_counter)
+        # give them the option to end the game/quit or start over
 
-                
-        elif (event.type == pygame.KEYUP):
-            # the user RELEASED a key
-            if (event.key == 273):
-                theHero.shouldMove("up", False)
-            elif (event.key == 274 ): 
-                theHero.shouldMove("down", False)
-            elif (event.key == 275):
-                theHero.shouldMove("right", False)
-            elif (event.key == 276):
-                theHero.shouldMove("left", False) 
+        pygame.display.flip()
 
-    # ======= DRAW STUFF =======
-    # we use blit to draw on the screen. blit = block image transfer
-    # blit is a method that takes 2 args:
-    # 1. What to draw
-    # 2. Where to draw it - Starts at 0,0 
-    # top left = 0,0
-    # top right = 0,480
-    # bottom = 512, 0 
-    # bottom right = 512 , 480
-    # background must be drawn first > hero > goblin , etc
-    pygame_screen.blit(background_image,[0, 0])
-
-    pygame_screen.blit(hero_image,[theHero.x, theHero.y])
-    theHero.drawMe(512, 480)
-
-    # draw the bad guys
-    def draw_bad_guy():
-        for badGuy in badGuys:
-            badGuy.update_me(theHero)
-            pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
-    
-    draw_bad_guy()
-
-    #draw the arrows
-    def draw_arrow():
-        for arrow in arrows:
-            arrow.updateMe()
-            pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
-
-    draw_arrow()
-    # create multiple bad guys
-    # create a loop that utilizes above function every x amount of seconds? 
-
-    # if arrow hits badGuys, this will remove both (hence both true)
-    arrowHit = groupcollide(arrows, badGuys, True, True)
-
-    # make point counter that increments each time your arrow hits the goblin
-    point_counter = 0
-    if arrowHit:
-        point_counter += 1
-
-    # display point counter on top right of screen
-
-    # make collision between badGuy and goodguy
-    heroHit = groupcollide(hero, badGuys, True, True)
-
-    
-    # If hero is hit via collision, game closes out, need to change this 
-    # to create a message
-    if heroHit:
-        game_on = False
-    # if game is over, give them their point total of bad guys slain, 
-    if game_on == False:
-        print (point_counter)
-    # give them the option to end the game/quit or start over
-
-    pygame.display.flip()
+main_game()

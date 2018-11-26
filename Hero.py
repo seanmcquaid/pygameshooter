@@ -14,7 +14,7 @@ class Hero(Sprite):
         self.shouldMoveDown = False
         self.shouldMoveRight = False
         self.shouldMoveLeft = False
-        self.rect = pygame.Rect(0, 0, 64, 64)
+        self.rect = pygame.Rect(0, 0, 32, 32)
         self.rect.centerx = self.x
         self.rect.centery = self.y
     def shouldMove(self, direction, start = True):

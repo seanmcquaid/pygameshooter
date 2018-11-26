@@ -10,7 +10,7 @@ class BadGuy(Sprite):
         self.x = 200
         self.y = 200
         self.speed = 2
-        self.rect = pygame.Rect(0, 0, 64, 64)
+        self.rect = pygame.Rect(0, 0, 32, 32)
         self.rect.centerx = self.x
         self.rect.centery = self.y
     def update_me(self, theHero):
@@ -24,3 +24,4 @@ class BadGuy(Sprite):
         self.y -= dy * self.speed
         # rectangle moves around with bad guy, if two rectangles collide
         self.rect.x = self.x
+        self.rect.y = self.y
