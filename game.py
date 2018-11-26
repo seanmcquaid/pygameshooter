@@ -8,6 +8,8 @@
 import pygame
 import time
 import random
+
+# import classes and objects
 from Hero import Hero
 from BadGuy import BadGuy
 from Arrow import Arrow
@@ -70,6 +72,10 @@ def game_intro():
         pygame_screen.fill(white)
         pygame.display.update()
 
+# shooter - title
+# instructions: run away from the goblin! For each goblin you shoot, you will accrue a point!
+# press space bar to start
+
 game_intro()
 
 # ==========MAIN GAME =============
@@ -127,10 +133,11 @@ while game_on:
     # top right = 0,480
     # bottom = 512, 0 
     # bottom right = 512 , 480
+    # background must be drawn first > hero > goblin , etc
     pygame_screen.blit(background_image,[0, 0])
 
     pygame_screen.blit(hero_image,[theHero.x, theHero.y])
-    theHero.drawMe()
+    theHero.drawMe(512, 480)
 
     # draw the bad guys
     def draw_bad_guy():
@@ -158,6 +165,8 @@ while game_on:
     if arrowHit:
         point_counter += 1
 
+    # display point counter on top right of screen
+
     # make collision between badGuy and goodguy
     heroHit = groupcollide(hero, badGuys, True, True)
 
@@ -167,6 +176,8 @@ while game_on:
     if heroHit:
         game_on = False
     # if game is over, give them their point total of bad guys slain, 
+    if game_on == False:
+        print (point_counter)
     # give them the option to end the game/quit or start over
 
     pygame.display.flip()

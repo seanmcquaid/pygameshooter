@@ -9,7 +9,7 @@ class Hero(Sprite):
         super(Hero, self).__init__()
         self.x = 100
         self.y = 100
-        self.speed = 10
+        self.speed = 5
         self.shouldMoveUp = False
         self.shouldMoveDown = False
         self.shouldMoveRight = False
@@ -26,20 +26,22 @@ class Hero(Sprite):
             self.shouldMoveRight = start
         if(direction == "left"):
             self.shouldMoveLeft = start
-    def drawMe(self):
+    def drawMe(self, w, h):
+        self.w = w
+        self.h = h 
         if (self.shouldMoveUp):
             if self.y > 32:
                 self.y -= self.speed
                 self.rect.y = self.y
         if (self.shouldMoveDown):
-            if self.y < 448:
+            if self.y <= h - 64:
                 self.y += self.speed
                 self.rect.y = self.y
         if (self.shouldMoveRight):
-            if self.x < 480:
+            if self.x <= w - 64:
                 self.x += self.speed
                 self.rect.x = self.x
         if (self.shouldMoveLeft):
-            if self.x > 32:
+            if self.x >= 32:
                 self.x -= self.speed
                 self.rect.x = self.x

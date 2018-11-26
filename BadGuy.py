@@ -9,7 +9,7 @@ class BadGuy(Sprite):
         super(BadGuy, self).__init__()
         self.x = 200
         self.y = 200
-        self.speed = 4
+        self.speed = 2
         self.rect = pygame.Rect(0, 0, 64, 64)
         self.rect.centerx = self.x
         self.rect.centery = self.y
