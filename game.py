@@ -13,6 +13,7 @@ import random
 from Hero import Hero
 from BadGuy import BadGuy
 from Arrow import Arrow
+from Button import Start_Button
 # Get group and groupcollide from the sprite module
 from pygame.sprite import Group, groupcollide
 
@@ -40,11 +41,13 @@ badGuys.add(badGuy)
 
 arrows = Group()
 
+# make a start button
+start_button = Start_Button(pygame_screen)
+
 # ==========VARIABLES FOR OUR GAME ===============
 #intro screen
 white = (255,255,255)
 black = (0,0,0)
-font = pygame.font.SysFont("comicsansms", 72)
 clock = pygame.time.Clock()
 
 background_image = pygame.image.load('background.png')
@@ -59,27 +62,31 @@ bg_music.play()
 
 # ======= INTRO SCREEN LOOP =======
 
-def game_intro():
-
-    intro = True
-
-    while intro:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if (event.key == 32):
-                    intro = False
+# def game_intro():
+#     intro = True
+#     while intro:
+#         start_button.setup_message
+#         start_button.draw_button()
+#         for event in pygame.event.get():
+#             if event.type == pygame.KEYDOWN:
+#                 if (event.key == 32):
+#                     intro = False
                 
-        pygame_screen.fill(white)
-        pygame.display.update()
 
 # shooter - title
 # instructions: run away from the goblin! For each goblin you shoot, you will accrue a point!
 # press space bar to start
 
-game_intro()
+# game_intro()
+
 
 # ==========MAIN GAME =============
 def main_game():
+    tick = 0
+    tick += 1 
+    if tick % 90:
+        badGuys.add(BadGuy())
+    game_intro = False  
     game_on = True
     # the loop will run as long qas our bool is true
     while game_on:
@@ -164,6 +171,7 @@ def main_game():
         # make point counter that increments each time your arrow hits the goblin
         point_counter = 0
         if arrowHit:
+            badGuys.add(BadGuy())
             point_counter += 1
 
         # display point counter on top right of screen
@@ -180,6 +188,9 @@ def main_game():
         if game_on == False:
             print (point_counter)
         # give them the option to end the game/quit or start over
+        if game_intro == False:
+            start_button.setup_message()
+            start_button.draw_button()
 
         pygame.display.flip()
 
