@@ -45,19 +45,12 @@ arrows = Group()
 start_button = Start_Button(pygame_screen)
 
 # ==========VARIABLES FOR OUR GAME ===============
-#intro screen
-white = (255,255,255)
-black = (0,0,0)
-clock = pygame.time.Clock()
 
 background_image = pygame.image.load('background.png')
 hero_image = pygame.image.load('hero.png')
 goblin_image = pygame.image.load('goblin.png')
 monster_image = pygame.image.load('monster.png')
-# arrow_image = pygame.image.load('Arrow.png')
-
-# clock tick
-tick = 0 
+# arrow_image = pygame.image.load('Arrow.png') 
 
 #background music created via pygame
 bg_music = pygame.mixer.Sound('bg.wav')
@@ -87,8 +80,12 @@ bg_music.play()
 def main_game():
     game_intro = False  
     game_on = True
+    tick = 0
     # the loop will run as long qas our bool is true
     while game_on:
+        tick += 1
+        if (tick % 90 == 0):
+            badGuys.add(badGuy)
         # we are in the game loop from here on out
         # 5. Listen for events and quit if the user clicks the x
         # ======= EVENT LISTENER =======
@@ -179,8 +176,8 @@ def main_game():
 
         # make point counter that increments each time your arrow hits the goblin
         # create badguy on each arrow hit
-        if arrowHit:
-            badGuys.add(BadGuy())
+        # if arrowHit:
+        #     badGuys.add(BadGuy())
         # display point counter on top right of screen
 
         # make collision between badGuy and goodguy
