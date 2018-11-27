@@ -32,7 +32,7 @@ pygame.display.set_caption('Shooter')
 #objects for each our hero and badguy
 theHero = Hero()
 hero = Group()
-hero.add(theHero)
+
 
 
 badGuy = BadGuy()
@@ -78,6 +78,7 @@ bg_music.play()
 
 # ==========MAIN GAME =============
 def main_game():
+    point_counter = 0
     game_intro = False  
     game_on = True
     tick = 0
@@ -85,7 +86,7 @@ def main_game():
     while game_on:
         tick += 1
         if (tick % 90 == 0):
-            badGuys.add(badGuy)
+            badGuys.add(BadGuy())
         # we are in the game loop from here on out
         # 5. Listen for events and quit if the user clicks the x
         # ======= EVENT LISTENER =======
@@ -93,6 +94,7 @@ def main_game():
             if (event.type == pygame.QUIT):
                 # THE USER CLICKED THE RED DOT!
                 game_on = False
+                print (point_counter)
             elif (event.type == pygame.KEYDOWN):
                 # THE USER PRESSED A KEY
                 if (event.key == 273):
@@ -135,6 +137,10 @@ def main_game():
                 # if you click the rectangle of the start button with your mouse
                 if start_button.rect.collidepoint(mouse_x, mouse_y):
                     game_intro = True
+                    hero.add(theHero)
+                    for enemy in badGuys:
+                        enemy.remove(badGuys)
+                    print (badGuys)
 
         # ======= DRAW STUFF =======
         # we use blit to draw on the screen. blit = block image transfer
@@ -176,8 +182,10 @@ def main_game():
 
         # make point counter that increments each time your arrow hits the goblin
         # create badguy on each arrow hit
-        # if arrowHit:
-        #     badGuys.add(BadGuy())
+        if arrowHit:
+            point_counter += 1
+            print (point_counter)
+
         # display point counter on top right of screen
 
         # make collision between badGuy and goodguy
@@ -195,7 +203,8 @@ def main_game():
         if game_intro == False:
             start_button.setup_message()
             start_button.draw_button()
+            # need to re add hero because he is getting removed from the group
+
 
         pygame.display.flip()
-
 main_game()
