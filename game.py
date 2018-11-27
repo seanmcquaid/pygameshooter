@@ -54,7 +54,10 @@ background_image = pygame.image.load('background.png')
 hero_image = pygame.image.load('hero.png')
 goblin_image = pygame.image.load('goblin.png')
 monster_image = pygame.image.load('monster.png')
-arrow_image = pygame.image.load('Arrow.png')
+# arrow_image = pygame.image.load('Arrow.png')
+
+# clock tick
+tick = 0 
 
 #background music created via pygame
 bg_music = pygame.mixer.Sound('bg.wav')
@@ -82,10 +85,6 @@ bg_music.play()
 
 # ==========MAIN GAME =============
 def main_game():
-    tick = 0
-    tick += 1 
-    if tick % 90:
-        badGuys.add(BadGuy())
     game_intro = False  
     game_on = True
     # the loop will run as long qas our bool is true
@@ -119,7 +118,6 @@ def main_game():
                     #Space bar..... FIRE!!!!
                     new_arrow = Arrow(theHero)
                     arrows.add(new_arrow)
-
                     
             elif (event.type == pygame.KEYUP):
                 # the user RELEASED a key
@@ -131,6 +129,15 @@ def main_game():
                     theHero.shouldMove("right", False)
                 elif (event.key == 276):
                     theHero.shouldMove("left", False) 
+
+
+            # mouse click on button to start game
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # gets x and y of mouse movement
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                # if you click the rectangle of the start button with your mouse
+                if start_button.rect.collidepoint(mouse_x, mouse_y):
+                    game_intro = True
 
         # ======= DRAW STUFF =======
         # we use blit to draw on the screen. blit = block image transfer
@@ -144,24 +151,26 @@ def main_game():
         # background must be drawn first > hero > goblin , etc
         pygame_screen.blit(background_image,[0, 0])
 
-        pygame_screen.blit(hero_image,[theHero.x, theHero.y])
-        theHero.drawMe(512, 480)
 
+        # create intro screen    
+        if game_intro == True:
+            pygame_screen.blit(hero_image,[theHero.x, theHero.y])
+            theHero.drawMe(512, 480)
         # draw the bad guys
-        def draw_bad_guy():
-            for badGuy in badGuys:
-                badGuy.update_me(theHero)
-                pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
-        
-        draw_bad_guy()
+            def draw_bad_guy():
+                for badGuy in badGuys:
+                    badGuy.update_me(theHero)
+                    pygame_screen.blit(monster_image,[badGuy.x, badGuy.y])
+            
+            draw_bad_guy()
 
-        #draw the arrows
-        def draw_arrow():
-            for arrow in arrows:
-                arrow.updateMe()
-                pygame_screen.blit(arrow_image, [arrow.x, arrow.y])
+            #draw the arrows
+            def draw_arrow():
+                for arrow in arrows:
+                    arrow.updateMe()
+                    pygame_screen.blit(arrow.img, [arrow.x, arrow.y])
 
-        draw_arrow()
+            draw_arrow()
         # create multiple bad guys
         # create a loop that utilizes above function every x amount of seconds? 
 
@@ -169,11 +178,9 @@ def main_game():
         arrowHit = groupcollide(arrows, badGuys, True, True)
 
         # make point counter that increments each time your arrow hits the goblin
-        point_counter = 0
+        # create badguy on each arrow hit
         if arrowHit:
             badGuys.add(BadGuy())
-            point_counter += 1
-
         # display point counter on top right of screen
 
         # make collision between badGuy and goodguy
@@ -183,10 +190,10 @@ def main_game():
         # If hero is hit via collision, game closes out, need to change this 
         # to create a message
         if heroHit:
-            game_on = False
+            game_intro = False
         # if game is over, give them their point total of bad guys slain, 
-        if game_on == False:
-            print (point_counter)
+        # if game_on == False:
+        #     print (point_counter)
         # give them the option to end the game/quit or start over
         if game_intro == False:
             start_button.setup_message()
